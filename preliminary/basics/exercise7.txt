@@ -1,0 +1,1 @@
+The error is caused by not closing a call such as a method call or using a ')' instead of a '}' in a one line of code in something like an if statement or when defining a hash.
