@@ -1,0 +1,1 @@
+It will output nothing because it is called with a block and not called using block.call.  It returns a proc.
