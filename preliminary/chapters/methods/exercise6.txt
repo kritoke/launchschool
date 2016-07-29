@@ -1,1 +1,0 @@
-It tells me that the mehod calculate_product needs a second argument, it was only given one.

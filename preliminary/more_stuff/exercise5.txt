@@ -1,1 +1,0 @@
-It lacks the & before the parameter, which indicates that it takes a block as a parameter.

@@ -1,1 +1,0 @@
-The error tells me that a variable was either not defined, or was defined in a different scope and is limited where it can be accessed from.

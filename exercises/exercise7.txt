@@ -1,1 +1,0 @@
-The difference between an array and a hash is a hash contains a key value pair for referencing by key.

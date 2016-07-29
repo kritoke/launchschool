@@ -1,3 +1,0 @@
-The index is made up of integers, not strings. A string is being used to try to change a value.  I would use this instead, referencing the integer that margaret is located in:
-
-names[3] = 'jody'

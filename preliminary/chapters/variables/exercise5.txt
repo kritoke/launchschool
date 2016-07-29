@@ -1,3 +1,0 @@
-The first exercise outputs a 3.
-
-The second exercise gives an error because x is a local variable in the do block.
