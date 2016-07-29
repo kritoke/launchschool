@@ -1,0 +1,1 @@
+I like the twitter gem api, http://www.rubydoc.info/gems/twitter.  Mostly because I find it would be useful to parse twitter and pull information out of the various tweets and appears to be fairly simple to use.
