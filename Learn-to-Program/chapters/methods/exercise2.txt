@@ -1,0 +1,9 @@
+1. x = 2 # Evaluates to x=> 2
+
+2. puts x = 2 # Evaluates to nil
+
+3. p name = "Joe" # Evaluates to name => "Joe"
+
+4. four = "four" # Evaluates to four => "four"
+
+5. print something = "nothing" # Evaluates to nil

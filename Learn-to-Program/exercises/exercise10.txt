@@ -1,0 +1,9 @@
+Yes
+
+#hash of arrays
+
+hash = {pets: ['cat', 'dog', 'fish']}
+
+# array of hashes
+
+array = [{pet: 'cat'}, {pet: 'dog'}, {pet: 'fish'}]
