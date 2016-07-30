@@ -87,4 +87,4 @@ loop do # main loop
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
-puts "Thank you for using the calculator.  Good bye!"
+prompt "Thank you for using the calculator.  Good bye!"
