@@ -1,12 +1,7 @@
-# Add up all of the ages from our current Munster family hash
+# Throw out the really old people (age 100 or older) in the age hash.
 
-ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 5843, "Eddie" => 10, "Marilyn" => 22, "Spot" => 237 }
+ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 402, "Eddie" => 10 }
 
-total_age = 0
-ages.each do |_, age|
-  total_age = age + total_age
-end
+ages.keep_if {|_, age| age < 100 }
 
-ages.keep_if
-
-p "Total Munster age is #{total_age}"
+p ages
