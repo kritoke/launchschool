@@ -11,7 +11,7 @@ end
 
 # rubocop:disable Metrics/AbcSize
 def display_board(brd)
-  system "cls"
+  system "clear"
   puts "You're an #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}.'"
   puts ""
   puts "     |     |"
@@ -48,11 +48,11 @@ def someone_won?(brd)
 end
 
 def player_move!(brd)
-  prompt "Choose a square (#{empty_squares(brd).join(' ')}):"
+  prompt "Choose a square (#{joinor(empty_squares(brd), ', ')}):"
   square = gets.chomp.to_i
   until empty_squares(brd).include?(square)
     prompt "Sorry, that's not a valid choice."
-    prompt "Choose a square (#{empty_squares(brd).join(' ')}):"
+    prompt "Choose a square (#{joinor(empty_squares(brd), ', ')}):"
     square = gets.chomp.to_i
   end
   square
@@ -72,6 +72,11 @@ def make_move!(current_player, brd)
   display_board(brd)
 end
 
+def joinor(brd_array, punctuation = ', ', conjunction = 'or')
+  brd_array[-1] = "#{conjunction} #{brd_array.last}" if brd_array.size > 1
+  brd_array.size == 2 ? brd_array.join(' ') : brd_array.join(punctuation)
+end
+
 def detect_winner(brd)
   WINNING_LINES.each do |line|
     if brd.values_at(line[0], line[1], line[2]).count(PLAYER_MARKER) == 3
@@ -83,24 +88,48 @@ def detect_winner(brd)
   nil
 end
 
-continue = 'y'
-until continue != 'y'
-  board = initialize_board
-  display_board(board)
-
-  until someone_won?(board) || board_full?(board)
-    make_move!("Player", board)
-    make_move!("Computer", board)
-  end
-
-  display_board(board)
-
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It's a tie!"
-  end
-
+def play_again?
   prompt "Play again? (y or n)"
-  continue = gets.chomp.downcase
+  gets.chomp.downcase
+end
+
+def update_high_score(score, brd)
+  case detect_winner(brd)
+  when 'Player'
+    score[:player] += 1
+  when 'Computer'
+    score[:computer] += 1
+  end
+end
+
+continue = 'y'
+score = { player: 0, computer: 0 }
+until continue != 'y'
+  until score.fetch(:player) == 5 || score.fetch(:computer) == 5 ||
+        continue != 'y'
+    board = initialize_board
+    display_board(board)
+
+    until someone_won?(board) || board_full?(board)
+      make_move!("Player", board)
+      make_move!("Computer", board)
+    end
+
+    display_board(board)
+
+    if someone_won?(board)
+      prompt "#{detect_winner(board)} won this round!"
+      update_high_score(score, board)
+    else
+      prompt "It's a tie!"
+    end
+    p score
+    if score[:player] == 5
+      prompt "Congradulations, you won the game against the computer!"
+    elsif score[:computer] == 5
+      prompt "Sorry, you lost the game to a computer!"
+    end
+    continue = play_again?
+  end
+  score = { player: 0, computer: 0 }
 end
