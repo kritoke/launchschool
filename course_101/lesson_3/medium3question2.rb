@@ -69,6 +69,32 @@ end
 
  fun_with_ids()
 
-# a_outer is 42 with an id of: 85 before the block.                                                                                                                                                                          # b_outer is forty two with an id of: 13123460 before the block.                                                                                                                                                             # c_outer is [42] with an id of: 13123440 before the block.                                                                                                                                                                   # d_outer is 42 with an id of: 85 before the block. 
+# a_outer is 42 with an id of: 85 before the block.
+# b_outer is forty two with an id of: 13123460 before the block.
+# c_outer is [42] with an id of: 13123440 before the block.
+# d_outer is 42 with an id of: 85 before the block.
 
-# a_outer id was 85 before the method and is: 85 inside the method.                                                                                                                                                           # b_outer id was 13123460 before the method and is: 13123460 inside the method.                                                                                                                                                # c_outer id was 13123440 before the method and is: 13123440 inside the method.                                                                                                                                                # d_outer id was 85 before the method and is: 85 inside the method
+# a_outer id was 85 before the method and is: 85 inside the method.
+# b_outer id was 13123460 before the method and is: 13123460 inside the method.
+# c_outer id was 13123440 before the method and is: 13123440 inside the method.
+# d_outer id was 85 before the method and is: 85 inside the method
+
+# a_outer inside after reassignment is 22 with an id of: 85 before and: 45 after.
+# b_outer inside after reassignment is thirty three with an id of: 16911360 before and: 16910640 after.
+# c_outer inside after reassignment is [44] with an id of: 16911340 before and: 16910620 after.
+# d_outer inside after reassignment is 44 with an id of: 85 before and: 89 after.
+
+# a_inner is 22 with an id of: 45 inside the method (compared to 45 for outer).
+# b_inner is thirty three with an id of: 16910640 inside the method (compared to 16910640 for outer).
+# c_inner is [44] with an id of: 16910620 inside the method (compared to 16910620 for outer).
+# d_inner is 44 with an id of: 89 inside the method (compared to 89 for outer).
+
+# a_outer is 42 with an id of: 85 BEFORE and: 85 AFTER the method call.
+# b_outer is forty two with an id of: 16911360 BEFORE and: 16911360 AFTER the method call.
+# c_outer is [42] with an id of: 16911340 BEFORE and: 16911340 AFTER the method call.
+# d_outer is 42 with an id of: 85 BEFORE and: 85 AFTER the method call.
+
+# ugh ohhhhh
+# ugh ohhhhh
+# ugh ohhhhh                                                                                                                                                                                                      
+# ugh ohhhhh
