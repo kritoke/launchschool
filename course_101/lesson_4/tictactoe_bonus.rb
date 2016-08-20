@@ -1,7 +1,7 @@
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
-FIRST_PLAYER = 'choose'
+FIRST_PLAYER = 'choose'.freeze
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +   # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +   # cols
                 [[1, 5, 9], [3, 5, 7]]                # diagonals
@@ -49,6 +49,7 @@ def someone_won?(brd)
 end
 
 def player_move!(brd)
+  display_board(brd)
   prompt "Choose a square (#{joinor(empty_squares(brd), ', ')}):"
   square = gets.chomp.to_i
   until empty_squares(brd).include?(square)
@@ -129,9 +130,29 @@ end
 
 def find_at_risk_square(line, brd, marker)
   if brd.values_at(*line).count(marker) == 2
-    brd.select { |key, value| line.include?(key) && value == INITIAL_MARKER }.keys.first
+    brd.select { |key, value|
+      line.include?(key) && value == INITIAL_MARKER
+    }.keys.first
+  end
+end
+
+def choose_player
+  
+  prompt "Who goes first? (1 for Human, 2 for Computer)"
+  starting_player = gets.chomp
+  case starting_player.to_i
+  when 1
+    "Player"
+  when 2
+    "Computer"
+  end
+end
+
+def swap_players(current_player)
+  if current_player == "Player"
+    "Computer"
   else
-    nil
+    "Player"
   end
 end
 
@@ -141,11 +162,17 @@ until continue != 'y'
   until score.fetch(:player) == 5 || score.fetch(:computer) == 5 ||
         continue != 'y'
     board = initialize_board
-    display_board(board)
+    prompt "First person to reach five wins is the winner.
+      Current Score: Human: #{score[:player]}, Computer: #{score[:computer]}."
+    current_player = if FIRST_PLAYER == "choose"
+                       current_player = choose_player
+                     else
+                       FIRST_PLAYER.capitalize
+                     end
 
     until someone_won?(board) || board_full?(board)
-      make_move!("Player", board)
-      make_move!("Computer", board)
+      make_move!(current_player, board)
+      current_player = swap_players(current_player)
     end
 
     display_board(board)
