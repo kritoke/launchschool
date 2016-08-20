@@ -137,7 +137,6 @@ def find_at_risk_square(line, brd, marker)
 end
 
 def choose_player
-  
   prompt "Who goes first? (1 for Human, 2 for Computer)"
   starting_player = gets.chomp
   case starting_player.to_i
@@ -145,6 +144,9 @@ def choose_player
     "Player"
   when 2
     "Computer"
+  else
+    prompt "Wrong choice, try again"
+    choose_player
   end
 end
 
