@@ -83,8 +83,10 @@ build_deck(deck)
 answer = nil
 
 until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
-  dealer_cards << deal_card!(deck)
-  player_cards << deal_card!(deck)
+  dealer_cards << deck.pop
+  player_cards << deck.pop
+  player_cards.each { |card| nice_output(card) }
+  prompt "\n Next \n"
   p total(player_cards)
   prompt "Hit or Stay?"
   answer = gets.chomp.downcase
