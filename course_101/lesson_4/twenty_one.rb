@@ -131,13 +131,15 @@ while continue_playing == 'y'
     dealer_cards << deal_card!(deck)
     player_cards << deal_card!(deck)
   end
+  dealer_total = total(dealer_cards)
+  player_total = total(player_cards)
 
   prompt "One of the dealer's cards is:"
   nice_output(dealer_cards.first)
 
   prompt "You have the following cards:"
   player_cards.each { |card| nice_output(card) }
-  prompt "The total value of the cards is: #{total(player_cards)}"
+  prompt "The total value of the cards is: #{player_total}"
 
   # player's turn
   until busted?(player_cards) || busted?(dealer_cards) || answer == 's'
@@ -148,7 +150,8 @@ while continue_playing == 'y'
       prompt "You chose to hit!"
       prompt "You have the following cards now:"
       player_cards.each { |card| nice_output(card) }
-      prompt "The total value of the cards is: #{total(player_cards)}"
+      player_total = total(player_cards)
+      prompt "The total value of the cards is: #{player_total}"
     else
       next
     end
@@ -158,37 +161,38 @@ while continue_playing == 'y'
     display_results(player_cards, dealer_cards)
     play_again? ? next : break
   else
-    prompt "You stayed at #{total(player_cards)}"
+    prompt "You stayed at #{player_total}"
   end
 
   prompt "Dealer's turn..."
 
   # dealer's turn
-  until busted?(dealer_cards) || total(dealer_cards) >= 17
+  until busted?(dealer_cards) || dealer_total >= 17
     prompt "Dealer hits!"
     dealer_cards << deal_card!(deck)
     prompt "Dealer's cards are now: "
     dealer_cards.each { |card| nice_output(card) }
+    dealer_total = total(dealer_cards)
   end
 
   if busted?(dealer_cards)
-    prompt "Dealer total is now: #{total(dealer_cards)}"
+    prompt "Dealer total is now: #{dealer_total}"
     display_results(player_cards, dealer_cards)
     play_again? ? next : break
   else
-    prompt "Dealer stays at #{total(dealer_cards)}"
+    prompt "Dealer stays at #{dealer_total}"
   end
 
   puts "=============="
   prompt "The Dealer had the following cards:"
   dealer_cards.each { |card| nice_output(card) }
-  prompt "The amount that they add up to is: #{total(dealer_cards)}"
+  prompt "The amount that they add up to is: #{dealer_total}"
 
   prompt "\n"
 
   prompt "The Player had the following cards:"
   player_cards.each { |card| nice_output(card) }
-  prompt "The amount that they add up to is: #{total(player_cards)}"
+  prompt "The amount that they add up to is: #{player_total}"
   puts "=============="
 
   display_results(player_cards, dealer_cards)
