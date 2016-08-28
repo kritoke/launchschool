@@ -115,6 +115,7 @@ end
 continue_playing = 'y'
 
 while continue_playing == 'y'
+  system "cls"
   prompt "Welcome to Twenty-One!"
 
   # initialize variables
@@ -153,6 +154,13 @@ while continue_playing == 'y'
     end
   end
 
+  if busted?(player_cards)
+    display_results(player_cards, dealer_cards)
+    play_again? ? next : break
+  else
+    prompt "You stayed at #{total(player_cards)}"
+  end
+
   prompt "Dealer's turn..."
 
   # dealer's turn
@@ -161,6 +169,14 @@ while continue_playing == 'y'
     dealer_cards << deal_card!(deck)
     prompt "Dealer's cards are now: "
     dealer_cards.each { |card| nice_output(card) }
+  end
+
+  if busted?(dealer_cards)
+    prompt "Dealer total is now: #{total(dealer_cards)}"
+    display_results(player_cards, dealer_cards)
+    play_again? ? next : break
+  else
+    prompt "Dealer stays at #{total(dealer_cards)}"
   end
 
   puts "=============="
