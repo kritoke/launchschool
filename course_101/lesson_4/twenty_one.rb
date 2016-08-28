@@ -1,3 +1,4 @@
+require 'pry'
 
 SUITS = %w(H S D C).freeze
 CARDS = %w(A K Q J 2 3 4 5 6 7 8 9).freeze
@@ -7,7 +8,7 @@ def prompt(msg)
 end
 
 def deal_card!(deck)
-  dealt_card = deck.sample
+  dealt_card = deck.sample.dup
   deck.delete_if { |card| dealt_card == card }
   dealt_card
 end
@@ -74,6 +75,16 @@ def busted?(cards)
   true if total(cards) > 21
 end
 
+def won?(player_score, dealer_score)
+  if player_score > dealer_score
+    prompt "Player Wins"
+  elsif player_score < dealer_score
+    prompt "Dealer Wins"
+  else
+    prompt "It's a tie."
+  end
+end
+
 deck = []
 player_cards = []
 dealer_cards = []
@@ -84,19 +95,32 @@ answer = nil
 
 dealer_cards << deal_card!(deck)
 player_cards << deal_card!(deck)
+dealer_cards << deal_card!(deck)
+player_cards << deal_card!(deck)
 
+prompt "The first card the dealer has is:"
+nice_output(dealer_cards.first)
 
 until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
-  dealer_cards << deal_card!(deck)
-  player_cards << deal_card!(deck)
-  p total(player_cards)
+  prompt "The Player has the following cards:"
+  player_cards.each { |card| nice_output(card) }
+  prompt "The amount that they add up to is: #{total(player_cards)}"
+
   prompt "Hit or Stay?"
   answer = gets.chomp.downcase
+  player_cards << deal_card!(deck) if answer != 'stay'
 end
 
-prompt "Player lost."  if busted?(player_cards)
-prompt "Dealer lost."  if busted?(dealer_cards)
+player_score = total(player_cards)
+dealer_score = total(dealer_cards)
 
+if busted?(player_cards)
+  prompt "Player lost."
+elsif busted?(dealer_cards)
+  prompt "Dealer lost."
+else
+  won?(player_score, dealer_score)
+end
 
 prompt "The Dealer has the following cards:"
 dealer_cards.each { |card| nice_output(card) }
@@ -107,3 +131,5 @@ prompt "\n"
 prompt "The Player has the following cards:"
 player_cards.each { |card| nice_output(card) }
 prompt "The amount that they add up to is: #{total(player_cards)}"
+
+
