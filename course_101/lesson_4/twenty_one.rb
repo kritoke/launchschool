@@ -143,7 +143,7 @@ while continue_playing == 'y'
     prompt "(H)it or (S)tay?"
     answer = gets.chomp.downcase.chars.first
     if answer.include?('h')
-      player_cards << deal_card!(deck) 
+      player_cards << deal_card!(deck)
       prompt "You chose to hit!"
       prompt "You have the following cards now:"
       player_cards.each { |card| nice_output(card) }
@@ -151,6 +151,14 @@ while continue_playing == 'y'
     else
       next
     end
+  end
+
+  # dealer's turn
+  until busted?(dealer_cards) || total(dealer_cards) >= 17
+    prompt "Dealer hits!"
+    dealer_cards << deal_card!(deck)
+    prompt "The Dealer had the following cards:"
+    dealer_cards.each { |card| nice_output(card) }
   end
 
   prompt "The Dealer had the following cards:"
