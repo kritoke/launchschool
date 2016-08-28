@@ -105,42 +105,55 @@ def display_results(player_cards, dealer_cards)
   end
 end
 
-deck = []
-player_cards = []
-dealer_cards = []
+def play_again?
+  puts "-------------"
+  prompt "Do you want to play again? (y or n)"
+  answer = gets.chomp
+  answer.downcase.chars.first
+end
 
-build_deck(deck)
+continue_playing = 'y'
 
-answer = nil
+while continue_playing == 'y'
+  prompt "Welcome to Twenty-One!"
 
-dealer_cards << deal_card!(deck)
-player_cards << deal_card!(deck)
-dealer_cards << deal_card!(deck)
-player_cards << deal_card!(deck)
+  # initialize variables
+  deck = []
+  player_cards = []
+  dealer_cards = []
+  answer = nil
 
-prompt "The first card the dealer has is:"
-nice_output(dealer_cards.first)
+  build_deck(deck)
 
-until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
-  prompt "The Player has the following cards:"
+  # deal initial cards
+  2.times do
+    dealer_cards << deal_card!(deck)
+    player_cards << deal_card!(deck)
+  end
+
+  prompt "The first card the dealer has is:"
+  nice_output(dealer_cards.first)
+
+  until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
+    prompt "The Player has the following cards:"
+    player_cards.each { |card| nice_output(card) }
+    prompt "The amount that they add up to is: #{total(player_cards)}"
+
+    prompt "Hit or Stay?"
+    answer = gets.chomp.downcase
+    player_cards << deal_card!(deck) if answer != 'stay'
+  end
+
+  prompt "The Dealer had the following cards:"
+  dealer_cards.each { |card| nice_output(card) }
+  prompt "The amount that they add up to is: #{total(dealer_cards)}"
+
+  prompt "\n"
+
+  prompt "The Player had the following cards:"
   player_cards.each { |card| nice_output(card) }
   prompt "The amount that they add up to is: #{total(player_cards)}"
 
-  prompt "Hit or Stay?"
-  answer = gets.chomp.downcase
-  player_cards << deal_card!(deck) if answer != 'stay'
+  display_results(player_cards, dealer_cards)
+  continue_playing = play_again?
 end
-
-
-
-display_results(player_cards, dealer_cards)
-
-prompt "The Dealer had the following cards:"
-dealer_cards.each { |card| nice_output(card) }
-prompt "The amount that they add up to is: #{total(dealer_cards)}"
-
-prompt "\n"
-
-prompt "The Player had the following cards:"
-player_cards.each { |card| nice_output(card) }
-prompt "The amount that they add up to is: #{total(player_cards)}"
