@@ -178,3 +178,5 @@ while continue_playing == 'y'
   display_results(player_cards, dealer_cards)
   continue_playing = play_again?
 end
+
+prompt "Thank you for playing Twenty-One! Good bye!"
