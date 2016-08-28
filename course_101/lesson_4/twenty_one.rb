@@ -153,14 +153,17 @@ while continue_playing == 'y'
     end
   end
 
+  prompt "Dealer's turn..."
+
   # dealer's turn
   until busted?(dealer_cards) || total(dealer_cards) >= 17
     prompt "Dealer hits!"
     dealer_cards << deal_card!(deck)
-    prompt "The Dealer had the following cards:"
+    prompt "Dealer's cards are now: "
     dealer_cards.each { |card| nice_output(card) }
   end
 
+  puts "=============="
   prompt "The Dealer had the following cards:"
   dealer_cards.each { |card| nice_output(card) }
   prompt "The amount that they add up to is: #{total(dealer_cards)}"
@@ -170,6 +173,7 @@ while continue_playing == 'y'
   prompt "The Player had the following cards:"
   player_cards.each { |card| nice_output(card) }
   prompt "The amount that they add up to is: #{total(player_cards)}"
+  puts "=============="
 
   display_results(player_cards, dealer_cards)
   continue_playing = play_again?
