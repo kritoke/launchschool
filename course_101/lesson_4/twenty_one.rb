@@ -14,16 +14,17 @@ def deal_card!(deck)
 end
 
 def nice_output(card)
-  change_card_name(card) if card[0].to_i.zero?
+  new_card_name = card.dup
+  change_card_name(new_card_name) if new_card_name[0].to_i.zero?
   case card[1]
   when 'D'
-    prompt "#{card[0]} of Diamonds"
+    prompt "#{new_card_name[0]} of Diamonds"
   when 'C'
-    prompt "#{card[0]} of Clubs"
+    prompt "#{new_card_name[0]} of Clubs"
   when 'H'
-    prompt "#{card[0]} of Hearts"
+    prompt "#{new_card_name[0]} of Hearts"
   else
-    prompt "#{card[0]} of Spades"
+    prompt "#{new_card_name[0]} of Spades"
   end
 end
 
@@ -51,7 +52,7 @@ def total(cards)
 
   sum = 0
   values.each do |value|
-    if value == "A"
+    if value == 'A'
       sum += 11
     elsif value.to_i.zero?
       sum += 10
@@ -60,7 +61,7 @@ def total(cards)
     end
   end
 
-  values.select { |value| value == "A" }.count.times do
+  values.select { |value| value == 'A' }.count.times do
     sum -= 10 if sum > 21
   end
 
@@ -68,7 +69,7 @@ def total(cards)
 end
 
 def busted?(cards)
-  true if total(cards) > 21
+  total(cards) > 21
 end
 
 def find_results(player_cards, dealer_cards)
@@ -90,7 +91,6 @@ end
 
 def display_results(player_cards, dealer_cards)
   result = find_results(player_cards, dealer_cards)
-
   case result
   when :player_busted
     prompt "You busted! Dealer wins!"
