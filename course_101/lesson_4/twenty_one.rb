@@ -13,10 +13,6 @@ def deal_card!(deck)
   dealt_card
 end
 
-def make_move!
-  
-end
-
 def nice_output(card)
   change_card_name(card) if card[0].to_i.zero?
   case card[1]
@@ -75,13 +71,37 @@ def busted?(cards)
   true if total(cards) > 21
 end
 
-def won?(player_score, dealer_score)
-  if player_score > dealer_score
-    prompt "Player Wins"
+def find_results(player_cards, dealer_cards)
+  player_score = total(player_cards)
+  dealer_score = total(dealer_cards)
+
+  if player_score > 21
+    :player_busted
+  elsif dealer_score > 21
+    :dealer_busted
+  elsif player_score > dealer_score
+    :player_wins
   elsif player_score < dealer_score
-    prompt "Dealer Wins"
+    :dealer_wins
   else
-    prompt "It's a tie."
+    :tie
+  end
+end
+
+def display_results(player_cards, dealer_cards)
+  result = find_results(player_cards, dealer_cards)
+
+  case result
+  when :player_busted
+    prompt "You busted! Dealer wins!"
+  when :dealer_busted
+    prompt "Dealer busted! You win!"
+  when :player_wins
+    prompt "You win!"
+  when :dealer_wins
+    prompt "Dealer wins!"
+  when :tie
+    prompt "It's a tie!"
   end
 end
 
@@ -111,25 +131,16 @@ until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
   player_cards << deal_card!(deck) if answer != 'stay'
 end
 
-player_score = total(player_cards)
-dealer_score = total(dealer_cards)
 
-if busted?(player_cards)
-  prompt "Player lost."
-elsif busted?(dealer_cards)
-  prompt "Dealer lost."
-else
-  won?(player_score, dealer_score)
-end
 
-prompt "The Dealer has the following cards:"
+display_results(player_cards, dealer_cards)
+
+prompt "The Dealer had the following cards:"
 dealer_cards.each { |card| nice_output(card) }
 prompt "The amount that they add up to is: #{total(dealer_cards)}"
 
 prompt "\n"
 
-prompt "The Player has the following cards:"
+prompt "The Player had the following cards:"
 player_cards.each { |card| nice_output(card) }
 prompt "The amount that they add up to is: #{total(player_cards)}"
-
-
