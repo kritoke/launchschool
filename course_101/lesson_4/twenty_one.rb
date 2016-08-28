@@ -131,17 +131,26 @@ while continue_playing == 'y'
     player_cards << deal_card!(deck)
   end
 
-  prompt "The first card the dealer has is:"
+  prompt "One of the dealer's cards is:"
   nice_output(dealer_cards.first)
 
-  until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
-    prompt "The Player has the following cards:"
-    player_cards.each { |card| nice_output(card) }
-    prompt "The amount that they add up to is: #{total(player_cards)}"
+  prompt "You have the following cards:"
+  player_cards.each { |card| nice_output(card) }
+  prompt "The total value of the cards is: #{total(player_cards)}"
 
-    prompt "Hit or Stay?"
-    answer = gets.chomp.downcase
-    player_cards << deal_card!(deck) if answer != 'stay'
+  # player's turn
+  until busted?(player_cards) || busted?(dealer_cards) || answer == 's'
+    prompt "(H)it or (S)tay?"
+    answer = gets.chomp.downcase.chars.first
+    if answer.include?('h')
+      player_cards << deal_card!(deck) 
+      prompt "You chose to hit!"
+      prompt "You have the following cards now:"
+      player_cards.each { |card| nice_output(card) }
+      prompt "The total value of the cards is: #{total(player_cards)}"
+    else
+      next
+    end
   end
 
   prompt "The Dealer had the following cards:"
