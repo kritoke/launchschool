@@ -13,7 +13,7 @@ def deal_card!(deck)
 end
 
 def make_move!
-  prompt "Would you li"
+  
 end
 
 def nice_output(card)
@@ -82,11 +82,13 @@ build_deck(deck)
 
 answer = nil
 
+dealer_cards << deal_card!(deck)
+player_cards << deal_card!(deck)
+
+
 until busted?(player_cards) || busted?(dealer_cards) || answer == 'stay'
-  dealer_cards << deck.pop
-  player_cards << deck.pop
-  player_cards.each { |card| nice_output(card) }
-  prompt "\n Next \n"
+  dealer_cards << deal_card!(deck)
+  player_cards << deal_card!(deck)
   p total(player_cards)
   prompt "Hit or Stay?"
   answer = gets.chomp.downcase
