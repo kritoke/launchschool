@@ -4,6 +4,7 @@ SUITS = %w(H S D C).freeze
 CARDS = %w(A K Q J 2 3 4 5 6 7 8 9).freeze
 WIN_VALUE = 21
 DEALER_HIT_VALUE = 17
+WIN_SCORE = 5
 
 def prompt(msg)
   puts msg
@@ -107,18 +108,34 @@ def display_results(player_cards, dealer_cards)
   end
 end
 
+def display_cards(player_cards, dealer_cards)
+  puts "=============="
+  prompt "The Dealer had the following cards:"
+  dealer_cards.each { |card| nice_output(card) }
+  prompt "The amount that they add up to is: #{total(dealer_cards)}"
+
+  prompt "\n"
+
+  prompt "The Player had the following cards:"
+  player_cards.each { |card| nice_output(card) }
+  prompt "The amount that they add up to is: #{total(player_cards)}"
+  puts "=============="
+end
+
 def play_again?
-  puts "-------------"
+  prompt "-------------"
   prompt "Do you want to play again? (y or n)"
   answer = gets.chomp
   answer.downcase.chars.first
 end
 
 continue_playing = 'y'
+score = { player: 0, dealer: 0 }
 
-while continue_playing == 'y'
-  system "cls"
-  prompt "Welcome to Twenty-One!"
+until score.fetch(:player) == 5 || score.fetch(:dealer) == 5 ||
+      continue_playing != 'y'
+  prompt "Welcome to the Game of #{WIN_VALUE}!"
+  prompt "-------------"
 
   # initialize variables
   deck = []
@@ -133,15 +150,18 @@ while continue_playing == 'y'
     dealer_cards << deal_card!(deck)
     player_cards << deal_card!(deck)
   end
+
   dealer_total = total(dealer_cards)
   player_total = total(player_cards)
 
   prompt "One of the dealer's cards is:"
   nice_output(dealer_cards.first)
+  prompt "\n"
 
   prompt "You have the following cards:"
   player_cards.each { |card| nice_output(card) }
   prompt "The total value of the cards is: #{player_total}"
+  prompt "\n"
 
   # player's turn
   until busted?(player_cards) || busted?(dealer_cards) || answer == 's'
@@ -150,16 +170,19 @@ while continue_playing == 'y'
     if answer.include?('h')
       player_cards << deal_card!(deck)
       prompt "You chose to hit!"
+      prompt "\n"
       prompt "You have the following cards now:"
       player_cards.each { |card| nice_output(card) }
       player_total = total(player_cards)
       prompt "The total value of the cards is: #{player_total}"
+      prompt "\n"
     else
       next
     end
   end
 
   if busted?(player_cards)
+    display_cards(player_cards, dealer_cards)
     display_results(player_cards, dealer_cards)
     play_again? ? next : break
   else
@@ -178,27 +201,17 @@ while continue_playing == 'y'
   end
 
   if busted?(dealer_cards)
-    prompt "Dealer total is now: #{dealer_total}"
+    display_cards(player_cards, dealer_cards)
     display_results(player_cards, dealer_cards)
     play_again? ? next : break
   else
     prompt "Dealer stays at #{dealer_total}"
   end
 
-  puts "=============="
-  prompt "The Dealer had the following cards:"
-  dealer_cards.each { |card| nice_output(card) }
-  prompt "The amount that they add up to is: #{dealer_total}"
-
-  prompt "\n"
-
-  prompt "The Player had the following cards:"
-  player_cards.each { |card| nice_output(card) }
-  prompt "The amount that they add up to is: #{player_total}"
-  puts "=============="
+  display_cards(player_cards, dealer_cards)
 
   display_results(player_cards, dealer_cards)
   continue_playing = play_again?
 end
 
-prompt "Thank you for playing Twenty-One! Good bye!"
+prompt "Thank you for playing #{WIN_VALUE}! Good bye!"
