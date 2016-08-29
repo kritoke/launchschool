@@ -2,6 +2,8 @@ require 'pry'
 
 SUITS = %w(H S D C).freeze
 CARDS = %w(A K Q J 2 3 4 5 6 7 8 9).freeze
+WIN_VALUE = 21
+DEALER_HIT_VALUE = 17
 
 def prompt(msg)
   puts msg
@@ -62,23 +64,23 @@ def total(cards)
   end
 
   values.select { |value| value == 'A' }.count.times do
-    sum -= 10 if sum > 21
+    sum -= 10 if sum > WIN_VALUE
   end
 
   sum
 end
 
 def busted?(cards)
-  total(cards) > 21
+  total(cards) > WIN_VALUE
 end
 
 def find_results(player_cards, dealer_cards)
   player_score = total(player_cards)
   dealer_score = total(dealer_cards)
 
-  if player_score > 21
+  if player_score > WIN_VALUE
     :player_busted
-  elsif dealer_score > 21
+  elsif dealer_score > WIN_VALUE
     :dealer_busted
   elsif player_score > dealer_score
     :player_wins
@@ -167,7 +169,7 @@ while continue_playing == 'y'
   prompt "Dealer's turn..."
 
   # dealer's turn
-  until busted?(dealer_cards) || dealer_total >= 17
+  until busted?(dealer_cards) || dealer_total >= DEALER_HIT_VALUE
     prompt "Dealer hits!"
     dealer_cards << deal_card!(deck)
     prompt "Dealer's cards are now: "
