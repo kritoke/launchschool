@@ -43,9 +43,7 @@ def change_card_name(card)
 end
 
 def build_deck(deck)
-  SUITS.each { |suit|
-    CARDS.each { |card| deck << [card, suit] }
-  }
+  SUITS.each { |suit| CARDS.each { |card| deck << [card, suit] } }
 end
 
 def total(cards)
