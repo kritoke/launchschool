@@ -1,5 +1,3 @@
-require 'pry'
-
 SUITS = %w(H S D C).freeze
 CARDS = %w(A K Q J 2 3 4 5 6 7 8 9).freeze
 WIN_VALUE = 21
@@ -71,6 +69,48 @@ def total(cards)
   sum
 end
 
+def hit_or_stay
+  answer = nil
+  until answer == 'h' || answer == 's'
+    prompt "(H)it or (S)tay?"
+    answer = gets.chomp.downcase.chars.first
+    if answer.include?('h')
+      prompt "You chose to hit!"
+    else
+      prompt "You must enter 'h' or 's'."
+    end
+  end
+  answer
+end
+
+def player_turn(player_cards, deck)
+  answer = nil
+  until busted?(player_cards) || answer == 's'
+    answer = hit_or_stay
+    if answer.include?('h')
+      player_cards << deal_card!(deck)
+      prompt "You have the following cards now:"
+      player_cards.each { |card| nice_output(card) }
+      player_total = total(player_cards)
+      prompt "The total value of the cards is: #{player_total}"
+      prompt "\n"
+    else
+      next
+    end
+  end
+end
+
+def dealer_turn(dealer_cards, deck)
+  dealer_total = total(dealer_cards)
+  until busted?(dealer_cards) || dealer_total >= DEALER_HIT_VALUE
+    prompt "Dealer hits!"
+    dealer_cards << deal_card!(deck)
+    prompt "Dealer's cards are now: "
+    dealer_cards.each { |card| nice_output(card) }
+    dealer_total = total(dealer_cards)
+  end
+end
+
 def busted?(cards)
   total(cards) > WIN_VALUE
 end
@@ -108,6 +148,27 @@ def display_results(player_cards, dealer_cards)
   end
 end
 
+def update_high_score!(score, result)
+  case result
+  when :player_wins
+    score[:player] += 1
+  when :dealer_wins
+    score[:dealer] += 1
+  when :dealer_busted
+    score[:player] += 1
+  when :player_busted
+    score[:dealer] += 1
+  end
+end
+
+def check_game_winner(score)
+  if score[:player] == WIN_SCORE
+    :player_wins
+  elsif score[:dealer] == WIN_SCORE
+    :dealer_wins
+  end
+end
+
 def display_cards(player_cards, dealer_cards)
   puts "=============="
   prompt "The Dealer had the following cards:"
@@ -123,25 +184,47 @@ def display_cards(player_cards, dealer_cards)
 end
 
 def play_again?
-  prompt "-------------"
   prompt "Do you want to play again? (y or n)"
   answer = gets.chomp
   answer.downcase.chars.first
 end
 
+def high_score_reached(score)
+  score.value?(WIN_SCORE)
+end
+
+def print_beginning(player_cards, dealer_cards)
+  prompt "One of the dealer's cards is:"
+  nice_output(dealer_cards.first)
+  prompt "\n"
+
+  prompt "You have the following cards:"
+  player_cards.each { |card| nice_output(card) }
+  prompt "The total value of the cards is: #{total(player_cards)}"
+  prompt "\n"
+end
+
+def print_scores(score)
+  prompt "=============="
+  prompt "Current Scores:"
+  prompt "Player: #{score[:player]}"
+  prompt "Dealer: #{score[:dealer]}"
+  prompt "First to Reach #{WIN_SCORE}, Wins."
+  prompt "=============="
+end
+
 continue_playing = 'y'
 score = { player: 0, dealer: 0 }
 
-until score.fetch(:player) == 5 || score.fetch(:dealer) == 5 ||
+until score.fetch(:player) == WIN_SCORE || score.fetch(:dealer) == WIN_SCORE ||
       continue_playing != 'y'
   prompt "Welcome to the Game of #{WIN_VALUE}!"
-  prompt "-------------"
+  print_scores(score)
 
   # initialize variables
   deck = []
   player_cards = []
   dealer_cards = []
-  answer = nil
 
   build_deck(deck)
 
@@ -151,67 +234,34 @@ until score.fetch(:player) == 5 || score.fetch(:dealer) == 5 ||
     player_cards << deal_card!(deck)
   end
 
-  dealer_total = total(dealer_cards)
+  print_beginning(player_cards, dealer_cards)
+
+  player_turn(player_cards, deck)
   player_total = total(player_cards)
 
-  prompt "One of the dealer's cards is:"
-  nice_output(dealer_cards.first)
-  prompt "\n"
-
-  prompt "You have the following cards:"
-  player_cards.each { |card| nice_output(card) }
-  prompt "The total value of the cards is: #{player_total}"
-  prompt "\n"
-
-  # player's turn
-  until busted?(player_cards) || busted?(dealer_cards) || answer == 's'
-    prompt "(H)it or (S)tay?"
-    answer = gets.chomp.downcase.chars.first
-    if answer.include?('h')
-      player_cards << deal_card!(deck)
-      prompt "You chose to hit!"
-      prompt "\n"
-      prompt "You have the following cards now:"
-      player_cards.each { |card| nice_output(card) }
-      player_total = total(player_cards)
-      prompt "The total value of the cards is: #{player_total}"
-      prompt "\n"
-    else
-      next
-    end
-  end
-
-  if busted?(player_cards)
-    display_cards(player_cards, dealer_cards)
-    display_results(player_cards, dealer_cards)
-    play_again? ? next : break
-  else
-    prompt "You stayed at #{player_total}"
-  end
-
-  prompt "Dealer's turn..."
-
-  # dealer's turn
-  until busted?(dealer_cards) || dealer_total >= DEALER_HIT_VALUE
-    prompt "Dealer hits!"
-    dealer_cards << deal_card!(deck)
-    prompt "Dealer's cards are now: "
-    dealer_cards.each { |card| nice_output(card) }
+  if !busted?(player_cards)
+    prompt "You stayed at #{player_total}."
+    dealer_turn(dealer_cards, deck)
     dealer_total = total(dealer_cards)
+    prompt "Dealer stays at #{dealer_total}." if !busted?(dealer_cards)
   end
 
-  if busted?(dealer_cards)
-    display_cards(player_cards, dealer_cards)
-    display_results(player_cards, dealer_cards)
-    play_again? ? next : break
-  else
-    prompt "Dealer stays at #{dealer_total}"
-  end
-
+  update_high_score!(score, find_results(player_cards, dealer_cards))
   display_cards(player_cards, dealer_cards)
-
   display_results(player_cards, dealer_cards)
+  print_scores(score)
+
+  if check_game_winner(score) == :player_wins
+    prompt "You won #{WIN_SCORE} rounds! Congrats."
+    prompt "=============="
+  elsif check_game_winner(score) == :dealer_wins
+    prompt "The dealer won #{WIN_SCORE} rounds! Better luck next time."
+    prompt "=============="
+  end
+
   continue_playing = play_again?
+  score = { player: 0, dealer: 0 } if high_score_reached(score) &&
+                                      continue_playing == 'y'
 end
 
 prompt "Thank you for playing #{WIN_VALUE}! Good bye!"
