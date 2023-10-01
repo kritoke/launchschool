@@ -36,6 +36,28 @@ WHILE iterator <= stringCount
     SET concatString = concatString + arrayString[iterator]
     SET iterator = iterator + 1
 
-PRINT concatString
+RETURN concatString
+
+END
+
+Problem 3
+
+START
+
+# Take an array of integers, returns a new array with every other element from the original array, starting with the first element
+
+SET arrayInts
+SET newArrayInts
+SET arrayIntsSize = size of the array of Ints
+SET iterator = 0
+
+WHILE iterator <= arrayIntsSize
+    IF iterator == 0
+        SET newArrayInts = arrayInts[iterator]
+    ELSE
+        SET newArrayInts = newArrayInts + arrayInts[iterator + 2]
+        SET iterator = iterator + 2
+
+PRINT newArrayInts
 
 END
