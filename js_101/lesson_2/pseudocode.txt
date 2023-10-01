@@ -61,3 +61,26 @@ WHILE iterator <= arrayIntsSize
 PRINT newArrayInts
 
 END
+
+Problem 4
+
+# a function that determines the index of the 3rd occurrence of a given character in a string.
+
+SET givenCharacter = character provided to search with
+SET givenString = string provided to search in
+SET stringLength = length of the string
+SET charCount = 0
+SET iterator = 0
+
+WHILE iterator <= stringLength
+    IF givenString[iterator] == givenCharacter
+        charCount = charCount + 1
+        iterator = iterator + 1
+    ELSE
+        iterator = iterator + 1
+    IF iterator == stringLength
+        IF charCount < 3
+            PRINT null
+        ELSE
+            PRINT charCount
+END
