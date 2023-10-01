@@ -1,0 +1,41 @@
+Problem 1 - informal pseudocode
+
+Given two numbers.
+
+Add the two numbers together.
+Return the result of the addition.
+
+Problem 1 - Formal PseudoCode
+
+START
+
+GET first number
+SET number1
+GET second number
+SET number2
+
+SET result = READ number1 + READ number2
+
+PRINT result
+
+END
+
+Problem 2
+
+START
+
+# Take an array of strings and return a string that is all those strings concatenated together.
+
+SET arrayString
+SET stringCount = value of the amount of strings in arrayString
+SET concatString = ""
+SET iterator = 0
+
+WHILE iterator <= stringCount
+
+    SET concatString = concatString + arrayString[iterator]
+    SET iterator = iterator + 1
+
+PRINT concatString
+
+END
