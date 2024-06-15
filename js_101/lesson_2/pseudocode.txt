@@ -84,3 +84,21 @@ WHILE iterator <= stringLength
         ELSE
             PRINT charCount
 END
+
+Problem 5
+
+# a function that takes two arrays of numbers and returns the result of merging the arrays. 
+
+SET firstArray = first array given
+SET secondArray = second array given
+SET newArray = blank array # will be the combined array from the first two
+
+SET newArrayIterator = 0
+SET arrayIterator = 0
+
+WHILE iterator <= secondArrayLength
+    newArray[newArrayIterator] = firstArray[iterator]
+    newArray[newArrayIterator + 1] = secondArray[iterator]
+    newArrayIterator = newArrayIterator + 2
+    arrayIterator = arrayIterator + 1
+END
