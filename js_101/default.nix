@@ -8,7 +8,7 @@ let
 in
 
 mkShell {
-  buildInputs = [git nodejs]
+  buildInputs = [git nodejs nodePackages_latest.eslint]
     ++ optional stdenv.isLinux inotify-tools;
 
 }
