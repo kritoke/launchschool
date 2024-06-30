@@ -12,25 +12,25 @@ function invalidNumber(num) {
 }
 
 do {
-  prompt(promptImport.welcome);
+  prompt(promptImport.en.welcome);
 
-  prompt(promptImport.firstNum);
+  prompt(promptImport.en.firstNum);
   let number1 = readline.question();
 
   while (invalidNumber(number1)) {
-    prompt(promptImport.invalidNum);
+    prompt(promptImport.en.invalidNum);
     number1 = readline.question();
   }
 
-  prompt(promptImport.secondNum);
+  prompt(promptImport.en.secondNum);
   let number2 = readline.question();
 
   while (invalidNumber(number2)) {
-    prompt(promptImport.invalidNum);
+    prompt(promptImport.en.invalidNum);
     number2 = readline.question();
   }
 
-  prompt(promptImport.operationQuestion);
+  prompt(promptImport.en.operationQuestion);
   let operation = readline.question();
 
   while (!['1', '2', '3', '4'].includes(operation)) {
@@ -54,13 +54,13 @@ do {
       break;
   }
 
-  prompt(`${promptImport.result} ${output}.`);
+  prompt(`${promptImport.en.result} ${output}.`);
 
-  prompt(promptImport.anotherOperation);
+  prompt(promptImport.en.anotherOperation);
   let continueAnswer = readline.question().toLowerCase();
 
   while (!['n', 'y'].includes(continueAnswer)) {
-    prompt(promptImport.incorrectAnswer);
+    prompt(promptImport.en.incorrectAnswer);
     continueAnswer = readline.question().toLowerCase();
   }
 
