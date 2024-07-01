@@ -11,4 +11,8 @@ mkShell {
   buildInputs = [git nodejs nodePackages_latest.eslint]
     ++ optional stdenv.isLinux inotify-tools;
 
+    shellHook =
+    ''
+    ~/.local/share/JetBrains/Toolbox/apps/webstorm/bin/webstorm.sh
+    '';
 }
